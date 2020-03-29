@@ -1,0 +1,44 @@
+version: '2'
+services:
+  client_midori:
+    image: 'armdsplayground/midori:latest'
+    stdin_open: true
+    tty: true
+    ports:
+      - '5800:5800'
+    networks:
+      public_client_network:
+        ipv4_address: 193.20.4.4
+    cap_add:
+      - NET_ADMIN
+  ssh_server:
+    image: 'armdsplayground/alpine-ssh-password:latest'
+    stdin_open: true
+    tty: true
+    ports:
+      - '2222:22'
+    networks:
+      not_visible_network:
+        ipv4_address: 193.20.2.2
+      public_client_network:
+        ipv4_address: 193.20.4.2
+    cap_add:
+      - NET_ADMIN
+  music_server:
+    image: 'armdsplayground/lamp:latest'
+    stdin_open: true
+    tty: true
+    networks:
+      not_visible_network:
+        ipv4_address: 193.20.2.3
+    volumes:
+      - './website:/var/www'
+networks:
+  not_visible_network:
+    ipam:
+      config:
+        - subnet: 193.20.2.1/24
+  public_client_network:
+    ipam:
+      config:
+        - subnet: 193.20.4.1/24
