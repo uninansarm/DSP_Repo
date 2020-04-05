@@ -1,5 +1,6 @@
 FROM armdsplayground/base-gui
-# Install xterm.
+
+# Install Midori and ssh.
 RUN add-pkg midori ssh
 
 LABEL \
